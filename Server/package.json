@@ -1,0 +1,58 @@
+{
+  "name": "total-mechanic",
+  "author": "Will de la Vega",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "description": "Aplicación de Intranet/Extranet para Mecánica Total",
+  "main": "app/boot.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node app/app.js",
+    "compile": "tsc -p ."
+  },
+  "keywords": [
+    "mecanica-total"
+  ],
+  "dependencies": {
+    "apoc": "^2.1.6",
+    "body-parser": "^1.15.2",
+    "connect-ensure-login": "^0.1.1",
+    "connect-flash": "^0.1.1",
+    "connect-roles": "^3.1.2",
+    "cookie-parser": "^1.4.3",
+    "crypto-js": "^3.1.8",
+    "ejs": "^2.5.2",
+    "express": "^4.14.0",
+    "express-session": "^1.14.2",
+    "jwt-simple": "^0.5.1",
+    "lodash": "^4.16.4",
+    "moment": "^2.17.1",
+    "multer": "^1.2.0",
+    "mysql": "^2.12.0",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1",
+    "passport-local": "^1.0.0",
+    "passport-strategy": "^1.0.0",
+    "rx-node": "^1.0.2",
+    "rxjs": "5.0.0-beta.10",
+    "serve-favicon": "^2.3.0",
+    "synchronize": "^2.0.0",
+    "xml2js": "^0.4.16",
+    "runtime-type-checks": "0.0.4"
+  },
+  "devDependencies": {
+    "@types/core-js": "^0.9.41",
+    "bower": "^1.7.9",
+    "chai": "^3.5.0",
+    "grunt": "^1.0.1",
+    "grunt-cli": "1.2.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-ts": "^6.0.0-beta.2",
+    "grunt-tslint": "^3.1.1",
+    "mocha": "^3.3.0",
+    "sinon": "^2.1.0",
+    "tslint": "^3.13.0",
+    "typescript": "^1.8.10",
+    "typings": "^1.4.0"
+  }
+}

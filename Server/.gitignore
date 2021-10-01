@@ -1,0 +1,9 @@
+node_modules/
+app/controllers/
+app/models/
+app/services/
+app/files/
+**/*.js.map
+npm-debug.log
+.vscode/settings.json
+.DS_Store

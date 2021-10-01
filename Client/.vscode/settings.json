@@ -1,0 +1,10 @@
+{
+    "vsicons.presets.angular": true,
+
+    "workbench.colorCustomizations": {
+        "activityBar.background" : "#1A1A1A",
+        "activityBar.foreground" : "#eee",
+        "activityBarBadge.foreground": "#263238",
+        "statusBar.background": "#101010"
+    }
+}

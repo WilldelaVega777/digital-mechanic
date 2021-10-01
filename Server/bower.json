@@ -1,0 +1,49 @@
+{
+  "name": "total-mechanic",
+  "description": "Proyecto de Extranet para Mecánica Total",
+  "main": "app/boot.js",
+  "authors": [
+    "NextWeb <WilldelaVega@geosysonline.com>"
+  ],
+  "license": "",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/lib"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "font-awesome": "^4.5.0",
+    "pwstrength-bootstrap": "^2.0.3",
+    "nouislider": "^9.0.0",
+    "snackbarjs": "^1.1.0",
+    "nanogallery": "^5.10.3",
+    "chartist": "^0.9.8",
+    "handlebars": "^4.0.5",
+    "observe-js": "^0.5.7",
+    "moment": "^2.15.2",
+    "lodash": "^4.16.6"
+  },
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "dist/js/bootstrap.js",
+        "dist/css/bootstrap.min.css",
+        "less/bootstrap.less"
+      ]
+    },
+    "font-awesome": {
+      "main": [
+        "less/font-awesome.less",
+        "css/font-awesome.min.css",
+        "scss/font/awesome.scss"
+      ]
+    }
+  },
+  "resolutions": {
+    "bootstrap": "v4-dev"
+  }
+}

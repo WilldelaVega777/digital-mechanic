@@ -1,0 +1,108 @@
+pipeline
+{
+    agent any
+    tools
+    {
+        nodejs 'NODE_LTS'
+    }
+
+    stages
+    {
+        stage('Preparation') 
+        {
+            steps 
+            {
+                // Obtiene el código del server git
+                git credentialsId: 'Git', url: 'https://masterdev@git.willdelavega.com/DigitalMechanic/Server'
+            }
+        }
+
+        stage('Build') 
+        {
+            steps 
+            {
+                // Elimina el Folder de Deploy si existe
+                sh 'rm -rf _TARGET'
+
+                // Instala los paquetes de Node
+                sh 'npm update'
+
+                // Compila el TypeScript
+                sh 'npm run compile'
+            }
+        }
+
+        stage('Test')
+        {
+            steps 
+            {
+                // Dependiendo del resultado del test continúa o no construyendo el target
+                sh 'npm test'
+            }
+        }
+
+        stage('Package') 
+        {
+            steps
+            {
+                // Crea y prepara el Directorio de Deploy
+                sh 'mkdir _TARGET; cd _TARGET; mkdir app'
+
+                // Copia los Archivos, Elimina los .map
+                sh 'cp -r app _TARGET'
+                sh 'cp package.json _TARGET'
+                sh 'rm -rf ./_TARGET/app/*.map'
+
+                // Empaqueta el archivo de Deploy
+                sh 'sudo 7za a -w_TARGET -tzip -r deploy.zip ./_TARGET/*'
+            }
+        }
+
+        stage('Deploy') 
+        {
+            steps
+            {
+                // Elimina la instalación anterior del server de staging
+                sh 'ssh ci@staging.willdelavega.com "sudo chmod -R 777 /var/www/api-digitalmechanic"'
+                sh 'ssh ci@staging.willdelavega.com "sudo rm -f /var/www/api-digitalmechanic/package.json"'
+                sh 'ssh ci@staging.willdelavega.com "sudo rm -f -r /var/www/api-digitalmechanic/app/"'
+                sh 'ssh ci@staging.willdelavega.com "sudo rm -f -r /var/www/api-digitalmechanic/node_modules/"'
+
+                // Transfiere el paquete de Deploy sobre SCP
+                sh 'scp deploy.zip ci@staging.willdelavega.com:/var/www/api-digitalmechanic'
+
+                // Desempaqueta el paquete de Deploy en el folder de deployment del Server
+                sh 'ssh ci@staging.willdelavega.com "sudo 7z x /var/www/api-digitalmechanic/deploy.zip -o/var/www/api-digitalmechanic"'
+
+                // Elimina el archivo dzip de Deploy del Workspace local
+                sh 'rm -f deploy.zip'
+
+                // Borra el paquete de deployment (zip) del server
+                sh 'ssh ci@staging.willdelavega.com "sudo rm /var/www/api-digitalmechanic/deploy.zip"'
+
+                // Con el source instalado en el folder de deployment, procede a instalar los paquetes de node de la aplicación con npm
+                sh 'ssh ci@staging.willdelavega.com "cd /var/www/api-digitalmechanic; sudo npm update"'
+
+                // Elimina los paquetes instalados de más (developer dependencies) de node_modules del folder de deployment en el server
+                sh 'ssh ci@staging.willdelavega.com "cd /var/www/api-digitalmechanic; sudo npm prune --production"'
+
+                // Le da la posesión del folder de deployment al usuario www-data para qeu apache2 pueda gestionarlo
+                sh 'ssh ci@staging.willdelavega.com "sudo chown -R www-data /var/www/api-digitalmechanic"'
+
+                // Cambia los permisos del folder de deployment en el server a permisos para la app de producción
+                sh 'ssh ci@staging.willdelavega.com "sudo chmod -R 775 /var/www/api-digitalmechanic"'
+
+                // Reinicia el server apache para activar los cambios
+                sh 'ssh ci@staging.willdelavega.com "sudo service apache2 restart"'
+            }
+        }
+
+        stage('Clean')
+        {
+            steps
+            {
+                cleanWs cleanWhenSuccess: false
+            }
+        }
+    }
+}
